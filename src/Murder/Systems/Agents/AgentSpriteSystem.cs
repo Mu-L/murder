@@ -23,6 +23,7 @@ using System.Numerics;
 namespace Murder.Systems
 {
     [Filter(ContextAccessorFilter.AllOf, typeof(PositionComponent), typeof(AgentSpriteComponent), typeof(FacingComponent), typeof(InCameraComponent))]
+    [Filter(ContextAccessorFilter.NoneOf, typeof(InvisibleComponent))]
     [ShowInEditor]
     public class AgentSpriteSystem : IMurderRenderSystem
     {
