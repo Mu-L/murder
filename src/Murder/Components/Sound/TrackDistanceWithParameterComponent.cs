@@ -4,6 +4,13 @@ using Murder.Utilities;
 
 namespace Murder.Components;
 
+[Flags]
+public enum TrackDistanceFlags
+{
+    None = 0,
+    Flip = 1
+}
+
 public readonly struct TrackDistanceWithParameterComponent : IComponent
 {
     public readonly float MinRange = 30;
@@ -13,6 +20,7 @@ public readonly struct TrackDistanceWithParameterComponent : IComponent
     public readonly Fact Parameter = new();
 
     public readonly ListenerKind Listener = ListenerKind.Camera;
+    public readonly TrackDistanceFlags Flags = TrackDistanceFlags.None;
 
     public TrackDistanceWithParameterComponent() { }
 }
