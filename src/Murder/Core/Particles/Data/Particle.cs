@@ -12,7 +12,7 @@ public readonly struct Particle
     [SpriteBatchReference]
     public readonly int SpriteBatch;
 
-    public readonly ParticleTexture Texture = new();
+    public readonly ParticleTexture Texture { get; init; } = new();
 
     [Tooltip("This is how long this particle lives.")]
     public readonly ParticleValueProperty LifeTime = ParticleValueProperty.Empty;
@@ -46,7 +46,7 @@ public readonly struct Particle
 
     [Tooltip("Rotation when the particle is instantiated.")]
     [Angle]
-    public readonly ParticleValueProperty Rotation = ParticleValueProperty.Empty;
+    public readonly ParticleValueProperty Rotation { get; init; } = ParticleValueProperty.Empty;
 
     public readonly bool RotateWithVelocity = false;
     public readonly float SortOffset;
@@ -55,39 +55,9 @@ public readonly struct Particle
 
     public Particle() { }
 
-    public Particle(
-        ParticleTexture texture,
-        ImmutableArray<Color> colors,
-        ImmutableArray<Vector2> scale,
-        ParticleValueProperty alpha,
-        ParticleValueProperty acceleration,
-        ParticleValueProperty friction,
-        ParticleValueProperty startVelocity,
-        ParticleValueProperty rotationSpeed,
-        ParticleValueProperty rotation,
-        ParticleValueProperty lifeTime,
-        bool rotateWithVelocity,
-        float sortOffset)
-    {
-        Texture = texture;
-        Colors = colors;
-        Scale = scale;
-        Alpha = alpha;
-        Acceleration = acceleration;
-        Friction = friction;
-        StartVelocity = startVelocity;
-        RotationSpeed = rotationSpeed;
-        Rotation = rotation;
-        LifeTime = lifeTime;
-        RotateWithVelocity = rotateWithVelocity;
-        SortOffset = sortOffset;
-    }
+    public Particle WithTexture(ParticleTexture texture) => this with { Texture = texture };
 
-    public Particle WithTexture(ParticleTexture texture) =>
-        new Particle(texture, Colors, Scale, Alpha, Acceleration, Friction, StartVelocity, RotationSpeed, Rotation, LifeTime, RotateWithVelocity, SortOffset);
-
-    public Particle WithRotation(float rotation) =>
-        new Particle(Texture, Colors, Scale, Alpha, Acceleration, Friction, StartVelocity, RotationSpeed, new(rotation), LifeTime, RotateWithVelocity, SortOffset);
+    public Particle WithRotation(float rotation) => this with { Rotation = new(rotation) };
 
     /// <summary>
     /// Calculate the color of a particle in a <paramref name="delta"/> with internal {0, 1}.

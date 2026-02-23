@@ -10,7 +10,7 @@ namespace Murder.Core.Particles
         public readonly int MaxParticlesPool = 100;
 
         [Tooltip("The shape which will be used to fire particles from.")]
-        public readonly EmitterShape Shape = default;
+        public readonly EmitterShape Shape { get; init; } = default;
 
         [Tooltip("Angle which the particles will be fired.")]
         [Angle]
@@ -30,19 +30,7 @@ namespace Murder.Core.Particles
 
         public Emitter() { }
 
-        public Emitter(int maxParticles, EmitterShape shape, ParticleValueProperty angle, ParticleValueProperty particlesPerSecond,
-            ParticleIntValueProperty burst, ParticleValueProperty speed)
-        {
-            MaxParticlesPool = maxParticles;
-            Shape = shape;
-            Angle = angle;
-            ParticlesPerSecond = particlesPerSecond;
-            Burst = burst;
-            Speed = speed;
-        }
-
-        public Emitter WithShape(EmitterShape shape) =>
-            new(MaxParticlesPool, shape, Angle, ParticlesPerSecond, Burst, Speed);
+        public Emitter WithShape(EmitterShape shape) => this with { Shape = shape };
 
         internal Rectangle BoundingBoxSize()
         {
