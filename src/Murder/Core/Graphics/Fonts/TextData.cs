@@ -75,6 +75,8 @@ public readonly record struct RuntimeLetterProperties
 
     public Color? Color { get; init; }
 
+    public Portrait? Icon { get; init; }
+
     /// <summary>
     /// Override the text speed from this letter on.
     /// </summary>
@@ -89,6 +91,7 @@ public readonly record struct RuntimeLetterProperties
             Shake = Shake != 0 ? Shake : other.Shake,
             Glitch = Glitch != 0 ? Glitch : other.Glitch,
             Color = Color ?? other.Color,
+            Icon = Icon ?? other.Icon,
             Speed = Speed != 0 ? Speed : other.Speed
         };
     }
@@ -166,7 +169,8 @@ public static partial class TextDataServices
         Color = 1 << 4,
         Wave = 1 << 5,
         Fear = 1 << 6,
-        Speed = 1 << 7
+        Speed = 1 << 7,
+        Icon = 1 << 8
     }
 
     // [Perf] Cache the last strings parsed.
@@ -219,15 +223,19 @@ public static partial class TextDataServices
         // Look for speed characters: <speed=.3/>
         MatchCollection matchesForSpeed = SpeedTags().Matches(text);
 
+        // Look for speed characters: <icon=xp/>
+        MatchCollection matchesForIcons = IconTags().Matches(text);
+
         int allocatedLengthForSpecialCharacters = 0;
         if (matchesForPauses.Count != 0 || matchesForShakes.Count != 0 || matchesForColors.Count != 0 ||
-            matchesForWaves.Count != 0 || matchesForFear.Count != 0 || matchesForSpeed.Count != 0 || matchesForGlitches.Count != 0)
+            matchesForWaves.Count != 0 || matchesForFear.Count != 0 || matchesForSpeed.Count != 0 || matchesForGlitches.Count != 0 ||
+            matchesForIcons.Count != 0)
         {
             allocatedLengthForSpecialCharacters = text.Length;
         }
 
         // Tracks the data for this letter.
-        Span<RuntimeLetterProperties> lettersBuilder = stackalloc RuntimeLetterProperties[allocatedLengthForSpecialCharacters];
+        Span<RuntimeLetterProperties> lettersBuilder = new RuntimeLetterProperties[allocatedLengthForSpecialCharacters];
 
         // Tracks all the letters in rawText which were skipped.
         Span<LetterSkipMetadataFlag> skippedLetters = stackalloc LetterSkipMetadataFlag[allocatedLengthForSpecialCharacters];
@@ -441,6 +449,30 @@ public static partial class TextDataServices
             }
         }
 
+        if (matchesForIcons.Count > 0)
+        {
+            for (int i = 0; i < matchesForIcons.Count; ++i)
+            {
+                Match match = matchesForIcons[i];
+
+                // BUT leave the first character alone, we'll use that.
+                // Mark all the characters that matched that they will be skipped.
+                for (int j = 1; j < match.Length; ++j)
+                {
+                    skippedLetters[match.Index + j] |= LetterSkipMetadataFlag.Icon;
+                }
+
+                string iconName = match.Groups[1].Value;
+
+                if (MurderFontServices.TryGetIconForText(iconName) is Portrait portrait)
+                {
+                    // Track that there is a pause at this index.
+                    int index = Math.Max(0, match.Index);
+                    lettersBuilder[index] = lettersBuilder[index] with { Icon = portrait };
+                }
+            }
+        }
+
         ImmutableDictionary<int, RuntimeLetterProperties>.Builder? letters = ImmutableDictionary.CreateBuilder<int, RuntimeLetterProperties>();
 
         string parsedText;
@@ -470,6 +502,13 @@ public static partial class TextDataServices
                 finalIndex++;
 
                 char c = text[currentIndex];
+
+                if (lettersBuilder[currentIndex].Icon is not null)
+                {
+                    // hardcode a 'M' character for icons when measuring the line length.
+                    c = 'M';
+                }
+
                 result.Append(c);
 
                 // Look, I also don't think this is correct. But I am still procrastinating doing the right solution for this.
@@ -620,6 +659,9 @@ public static partial class TextDataServices
 
     [GeneratedRegex("<speed=([^\\/]+)\\/>|<speed=([^>]+)>(.*?)</speed>", RegexOptions.IgnoreCase)]
     private static partial Regex SpeedTags();
+
+    [GeneratedRegex("<icon=([^>]+)>", RegexOptions.IgnoreCase)]
+    private static partial Regex IconTags();
 
     [GeneratedRegex("<bp>")]
     private static partial Regex ReplaceBreakpointOnWords();

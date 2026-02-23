@@ -1,4 +1,6 @@
-﻿using Murder.Core.Geometry;
+﻿using Murder.Assets;
+using Murder.Core;
+using Murder.Core.Geometry;
 using Murder.Core.Graphics;
 using Murder.Utilities.Attributes;
 
@@ -56,5 +58,15 @@ public static class MurderFontServices
     {
         PixelFont f = Game.Data.GetFont((int)font, cultureInvariant);
         return f.LineHeight;
+    }
+
+    public static Portrait? TryGetIconForText(string id)
+    {
+        if (Game.Data.TryGetAsset<TextIconsAsset>(Game.Profile.TextIcons) is not TextIconsAsset asset)
+        {
+            return null;
+        }
+
+        return asset.TryFetchIcon(id);
     }
 }

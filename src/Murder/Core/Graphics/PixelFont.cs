@@ -347,27 +347,36 @@ public class PixelFontSize
                 break;
             }
 
-            if (Characters.TryGetValue(character, out PixelFontCharacter? c))
+            float waveOffset = 0f;
+            Vector2 shake = Vector2.Zero;
+
+            if (letter is not null)
             {
-                float waveOffset = 0f;
-                Vector2 shake = Vector2.Zero;
-                if (letter is not null)
+                if (letter.Value.Properties.HasFlag(RuntimeLetterPropertiesFlag.Wave))
                 {
-                    if (letter.Value.Properties.HasFlag(RuntimeLetterPropertiesFlag.Wave))
-                    {
-                        waveOffset = MathF.Sin(Game.NowUnscaled * 4f + i);
-                    }
-                    if (letter.Value.Properties.HasFlag(RuntimeLetterPropertiesFlag.Fear))
-                    {
-                        float amplitude = .9f;
-                        float smoothFactor = Math.Abs(MathF.Sin(Game.NowUnscaled * 16f + i * 2));
-                        smoothFactor *= smoothFactor;
-                        shake = new Vector2(Game.Random.NextFloat(-smoothFactor, smoothFactor) * amplitude, Game.Random.NextFloat(-smoothFactor, smoothFactor) * amplitude);
-                    }
+                    waveOffset = MathF.Sin(Game.NowUnscaled * 4f + i);
                 }
+                if (letter.Value.Properties.HasFlag(RuntimeLetterPropertiesFlag.Fear))
+                {
+                    float amplitude = .9f;
+                    float smoothFactor = Math.Abs(MathF.Sin(Game.NowUnscaled * 16f + i * 2));
+                    smoothFactor *= smoothFactor;
+                    shake = new Vector2(Game.Random.NextFloat(-smoothFactor, smoothFactor) * amplitude, Game.Random.NextFloat(-smoothFactor, smoothFactor) * amplitude);
+                }
+            }
 
-                Vector2 effects = new Vector2(shake.X, shake.Y + waveOffset);
+            Vector2 effects = new Vector2(shake.X, shake.Y + waveOffset);
 
+            if (letter?.Icon is Portrait icon)
+            {
+                Point pos = (position + (offset + new Vector2(0, LineHeight - 1) * scale - justified) + effects).Floor();
+                RenderServices.DrawPortrait(spriteBatch, icon, pos, new DrawInfo(sort) { Origin = new(0, 0) });
+
+                offset.X += 6;
+                currentWidth += 6;
+            }
+            else if (Characters.TryGetValue(character, out PixelFontCharacter? c))
+            {
                 Point pos = (position + (offset + new Vector2(c.XOffset, c.YOffset + LineHeight - 1) * scale - justified) + effects).Floor();
 
                 var texture = Textures[c.Page];
@@ -417,6 +426,7 @@ public class PixelFontSize
                             glyph.Height + +val);
                     }
                 }
+
                 // ==== Draw stroke ====
                 if (strokeColor.HasValue)
                 {

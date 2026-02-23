@@ -1,9 +1,7 @@
 ﻿using Microsoft.Xna.Framework.Input;
 using Murder.Attributes;
 using Murder.Core.Input;
-using System;
 using System.Collections.Immutable;
-using static Murder.Assets.InputGraphicsAsset;
 
 namespace Murder.Assets.Input;
 

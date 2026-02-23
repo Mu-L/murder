@@ -156,8 +156,8 @@ namespace Murder.Assets
 
         public readonly ViewportResizeStyle ResizeStyle = new();
 
-        [Bang.Serialize]
-        internal bool _scalingFilter = false;
+        [Serialize]
+        private readonly bool _scalingFilter = false;
 
         /// <summary>
         /// Texture scaling smoothing
@@ -172,7 +172,6 @@ namespace Murder.Assets
         /// </summary>
         public readonly bool IsVSyncEnabled = true;
 
-        public readonly bool ShowUiDebug = true;
         public readonly float PushAwayInterval = 0.05f;
         public readonly int DefaultGridCellSize = 24;
 
@@ -185,7 +184,7 @@ namespace Murder.Assets
         /// </summary>
         [Tooltip("Load textures on start, slower startup but no delays in game")]
         [Serialize]
-        public bool PreloadTextures = true;
+        public readonly bool PreloadTextures = true;
 
         public readonly Theme Theme = new Theme();
 
@@ -197,7 +196,7 @@ namespace Murder.Assets
         public Color BackColor = Color.Black;
 
         [SimpleTexture, Serialize]
-        internal string DefaultPalette = "images/murder_palette";
+        public readonly string DefaultPalette = "images/murder_palette";
 
         /// <summary>
         /// ID of the default image used when an image is missing.
@@ -213,16 +212,21 @@ namespace Murder.Assets
         [GameAssetId(typeof(LocalizationAsset))]
         public ImmutableDictionary<LanguageId, Guid> LocalizationResources = ImmutableDictionary<LanguageId, Guid>.Empty;
 
+        /// <summary>
+        /// Icons used for rendering text in the game.
+        /// </summary>
+        [GameAssetId<TextIconsAsset>]
+        public readonly Guid TextIcons = Guid.Empty;
+
         [Tooltip("Aditional collision checks will be done if an entity moves more than X pixels per frame")]
-        public int MinimumVelocityForSweep = 6;
+        public readonly int MinimumVelocityForSweep = 6;
 
         [GameAssetId<InputGraphicsAsset>]
-        public Guid InputGraphics = Guid.Empty;
+        public readonly Guid InputGraphics = Guid.Empty;
 
         [GameAssetId<InputProfileAsset>]
-        public Guid InputProfile = Guid.Empty;
+        public readonly Guid InputProfile = Guid.Empty;
 
-        public GameProfile() =>
-            FilePath = GameDataManager.GameProfileFileName;
+        public GameProfile() => FilePath = GameDataManager.GameProfileFileName;
     }
 }
