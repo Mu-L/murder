@@ -21,8 +21,14 @@ namespace Murder.Utilities
         /// <param name="chance">Chance of succeeding. From 0 to 1</param>
         public static bool TryWithChanceOf(this Random random, float chance)
         {
+            if (chance == 0)
+            {
+                return false;
+            }
+
             return random.NextFloat() <= chance;
         }
+
         public static float SmoothRandom(float seed, float smoothness)
         {
             float x = seed * smoothness;
