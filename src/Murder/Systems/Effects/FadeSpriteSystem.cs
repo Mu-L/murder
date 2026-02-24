@@ -23,21 +23,25 @@ public class FadeSpriteSystem : IMonoPreRenderSystem
             float alpha = Calculator.Lerp(fade.StartAlpha, fade.EndAlpha, delta);
 
             // e.SetTint(Color.White * alpha);
-            if (fade.FadeSpriteFlags.HasFlag(FadeSpriteFlags.Alpha))
+            if (fade.Flags.HasFlag(FadeSpriteFlags.Alpha))
             {
                 e.SetAlpha(alpha);
             }
 
-            if (fade.FadeSpriteFlags.HasFlag(FadeSpriteFlags.Scale))
+            if (fade.Flags.HasFlag(FadeSpriteFlags.Scale))
             {
                 e.SetScale(Vector2.One * alpha);
             }
 
             if (delta >= 1)
             {
-                if (fade.DestroyOnEnd)
+                if (fade.Flags.HasFlag(FadeSpriteFlags.DestroyOnEnd))
                 {
                     e.Destroy();
+                }
+                else if (fade.Flags.HasFlag(FadeSpriteFlags.DeactivateOnEnd))
+                {
+                    e.Deactivate();
                 }
                 else
                 {

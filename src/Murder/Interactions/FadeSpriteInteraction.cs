@@ -1,6 +1,7 @@
 ﻿using Bang;
 using Bang.Entities;
 using Bang.Interactions;
+using Murder.Components;
 
 namespace Murder.Interactions;
 
@@ -13,9 +14,17 @@ public readonly struct FadeSpriteInteraction() : IInteraction
 
     public void Interact(World world, Entity interactor, Entity? interacted)
     {
-        if (interacted is Entity entity)
+        if (interacted is not Entity entity)
         {
-            entity.SetFadeSprite(Game.Now, Game.Now + FadeDuration, StartAlpha, EndAlpha, DestroyOnEnd);
+            return;
         }
+
+        FadeSpriteFlags flags = FadeSpriteFlags.Alpha;
+        if (DestroyOnEnd)
+        {
+            flags |= FadeSpriteFlags.DestroyOnEnd;
+        }
+
+        entity.SetFadeSprite(Game.Now, Game.Now + FadeDuration, StartAlpha, EndAlpha, flags);
     }
 }
