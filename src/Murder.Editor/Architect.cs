@@ -89,9 +89,7 @@ namespace Murder.Editor
 
             InitializeImGui();
 
-            base.Initialize(); 
-            OnWindowChanged();
-
+            base.Initialize();
             ImGuiRenderer.InitTheme();
         }
 
@@ -326,7 +324,12 @@ namespace Murder.Editor
             }
         }
 
-        protected override void LoadContentImpl() { }
+        protected override void LoadContentImpl() 
+        {
+            // make sure we pick up the resolution from the last window size
+            // saved in the editor settings file.
+            OnWindowChanged();
+        }
 
         protected override async Task LoadSceneAsync(bool waitForAllContent)
         {
