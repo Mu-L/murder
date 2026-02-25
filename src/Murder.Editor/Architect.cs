@@ -324,12 +324,7 @@ namespace Murder.Editor
             }
         }
 
-        protected override void LoadContentImpl() 
-        {
-            // make sure we pick up the resolution from the last window size
-            // saved in the editor settings file.
-            OnWindowChanged();
-        }
+        protected override void LoadContentImpl() { }
 
         protected override async Task LoadSceneAsync(bool waitForAllContent)
         {
@@ -343,6 +338,10 @@ namespace Murder.Editor
 
                 hook.DrawEntityInspector += EntityInspector.DrawInspector;
             }
+
+            // make sure we pick up the resolution from the last window size
+            // saved in the editor settings file.
+            OnWindowChanged();
         }
 
         private bool _isForeground = false;
