@@ -21,7 +21,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.7
+      "AnimationDuration": 0.7,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",

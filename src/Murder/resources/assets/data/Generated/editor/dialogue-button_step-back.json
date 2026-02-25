@@ -9,7 +9,19 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
+    },
+    "down": {
+      "Frames": [
+        2
+      ],
+      "FramesDuration": [
+        100
+      ],
+      "Events": {},
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "": {
       "Frames": [
@@ -25,7 +37,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.4
+      "AnimationDuration": 0.4,
+      "NextAnimation": []
     },
     "hover": {
       "Frames": [
@@ -35,7 +48,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "normal": {
       "Frames": [
@@ -45,17 +59,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
-    },
-    "down": {
-      "Frames": [
-        2
-      ],
-      "FramesDuration": [
-        100
-      ],
-      "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",

@@ -9,7 +9,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",
@@ -22,14 +23,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 303,
-        "Y": 81,
+        "X": 405,
+        "Y": 17,
         "Width": 15,
         "Height": 15
       },
       "UV": {
-        "X": 0.5917969,
-        "Y": 0.15820312,
+        "X": 0.7910156,
+        "Y": 0.033203125,
         "Width": 0.029296875,
         "Height": 0.029296875
       },

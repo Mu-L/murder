@@ -9,7 +9,19 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
+    },
+    "down": {
+      "Frames": [
+        2
+      ],
+      "FramesDuration": [
+        100
+      ],
+      "Events": {},
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "": {
       "Frames": [
@@ -25,7 +37,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.4
+      "AnimationDuration": 0.4,
+      "NextAnimation": []
     },
     "hover": {
       "Frames": [
@@ -35,7 +48,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "normal": {
       "Frames": [
@@ -45,17 +59,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
-    },
-    "down": {
-      "Frames": [
-        2
-      ],
-      "FramesDuration": [
-        100
-      ],
-      "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",
@@ -68,14 +73,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 34,
-        "Y": 277,
+        "X": 318,
+        "Y": 81,
         "Width": 11,
         "Height": 12
       },
       "UV": {
-        "X": 0.06640625,
-        "Y": 0.5410156,
+        "X": 0.62109375,
+        "Y": 0.15820312,
         "Width": 0.021484375,
         "Height": 0.0234375
       },
@@ -95,14 +100,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 17,
-        "Y": 293,
+        "X": 303,
+        "Y": 98,
         "Width": 11,
         "Height": 12
       },
       "UV": {
-        "X": 0.033203125,
-        "Y": 0.5722656,
+        "X": 0.5917969,
+        "Y": 0.19140625,
         "Width": 0.021484375,
         "Height": 0.0234375
       },
@@ -122,14 +127,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 0,
-        "Y": 307,
+        "X": 286,
+        "Y": 115,
         "Width": 11,
         "Height": 12
       },
       "UV": {
-        "X": 0,
-        "Y": 0.5996094,
+        "X": 0.55859375,
+        "Y": 0.22460938,
         "Width": 0.021484375,
         "Height": 0.0234375
       },
@@ -149,14 +154,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 455,
-        "Y": 0,
+        "X": 269,
+        "Y": 132,
         "Width": 11,
         "Height": 12
       },
       "UV": {
-        "X": 0.8886719,
-        "Y": 0,
+        "X": 0.5253906,
+        "Y": 0.2578125,
         "Width": 0.021484375,
         "Height": 0.0234375
       },

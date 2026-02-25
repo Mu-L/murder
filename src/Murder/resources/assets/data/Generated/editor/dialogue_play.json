@@ -9,27 +9,28 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",
   "Frames": [
     {
       "AtlasIndex": 0,
-      "Name": "dialogue_play",
+      "Name": "dialogue-button_play_0000",
       "Size": {
         "X": 16,
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 438,
-        "Y": 14,
+        "X": 318,
+        "Y": 81,
         "Width": 11,
         "Height": 12
       },
       "UV": {
-        "X": 0.85546875,
-        "Y": 0.02734375,
+        "X": 0.62109375,
+        "Y": 0.15820312,
         "Width": 0.021484375,
         "Height": 0.0234375
       },

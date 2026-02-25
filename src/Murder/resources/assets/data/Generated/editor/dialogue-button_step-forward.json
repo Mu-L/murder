@@ -9,7 +9,19 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
+    },
+    "down": {
+      "Frames": [
+        2
+      ],
+      "FramesDuration": [
+        100
+      ],
+      "Events": {},
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "": {
       "Frames": [
@@ -25,7 +37,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.4
+      "AnimationDuration": 0.4,
+      "NextAnimation": []
     },
     "hover": {
       "Frames": [
@@ -35,7 +48,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     },
     "normal": {
       "Frames": [
@@ -45,17 +59,8 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
-    },
-    "down": {
-      "Frames": [
-        2
-      ],
-      "FramesDuration": [
-        100
-      ],
-      "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",
@@ -122,14 +127,14 @@
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 0,
-        "Y": 277,
+        "X": 34,
+        "Y": 243,
         "Width": 16,
         "Height": 15
       },
       "UV": {
-        "X": 0,
-        "Y": 0.5410156,
+        "X": 0.06640625,
+        "Y": 0.47460938,
         "Width": 0.03125,
         "Height": 0.029296875
       },

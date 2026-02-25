@@ -4,6 +4,7 @@
   "ContentAsepritePath": "aseprite/",
   "FontPath": "shaders/",
   "SoundsPath": "sounds/",
+  "VideoPath": "video/",
   "DialoguesPath": "dialogues/",
   "LocalizationPath": "loc/",
   "ShadersPath": "shaders/",
@@ -24,11 +25,8 @@
     "PositiveApectRatioAllowance": 0.5,
     "NegativeApectRatioAllowance": 0.1
   },
-  "Fullscreen": false,
   "TargetFps": 60,
-  "FixedUpdateFactor": 2,
   "IsVSyncEnabled": false,
-  "ShowUiDebug": true,
   "PushAwayInterval": 0.05,
   "DefaultGridCellSize": 24,
   "StartingScene": "00000000-0000-0000-0000-000000000000",
@@ -111,22 +109,12 @@
       "Y": 0.9765625,
       "Z": 0.546875,
       "W": 1
-    }
-  },
-  "Exploration": {
-    "TileExplorationDuration": 0.5,
-    "SpriteExplorationDuration": 1.5,
-    "UnexploredColor": {
-      "R": 0.12109375,
-      "G": 0.15234375,
-      "B": 0.23828125,
-      "A": 1
     },
-    "ExploreColor": {
-      "R": 0.796875,
-      "G": 0.6015625,
-      "B": 0.984375,
-      "A": 1
+    "YellowFaded": {
+      "X": 0.37890625,
+      "Y": 0.37109375,
+      "Z": 0.24609375,
+      "W": 1
     }
   },
   "EditorAssets": {
@@ -136,6 +124,7 @@
     "Eye": "5977841c-6962-360b-3712-55a9e352072d",
     "CutsceneImage": "e5084a6c-dcc6-09e0-628b-996637c46224",
     "AnchorImage": "e098676d-e88e-086a-42a8-b2cd0d42e217",
+    "PointAnchorImage": "43420358-b1bb-42d0-8282-0322badef6b2",
     "BoxBg": {
       "Core": {
         "X": 0,
@@ -195,11 +184,14 @@
     "B": 0,
     "A": 1
   },
+  "DefaultPalette": "images\\murder_palette",
   "MissingImage": "485a9a13-e62b-7215-dbc3-9e1df4bcba73",
   "LocalizationResources": {},
+  "TextIcons": "00000000-0000-0000-0000-000000000000",
   "MinimumVelocityForSweep": 6,
+  "InputGraphics": "00000000-0000-0000-0000-000000000000",
+  "InputProfile": "00000000-0000-0000-0000-000000000000",
   "Name": "Game Profile",
   "Guid": "ba8af4fb-54f1-45d3-8635-454f07987014",
-  "scalingFilter": false,
-  "DefaultPalette": "images\\murder_palette"
+  "scalingFilter": false
 }

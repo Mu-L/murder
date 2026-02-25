@@ -25,6 +25,9 @@ namespace Murder.Assets
 
         [GameAssetId<SpriteAsset>]
         public readonly Guid AnchorImage = new("e098676d-e88e-086a-42a8-b2cd0d42e217");
+        
+        [GameAssetId<SpriteAsset>]
+        public readonly Guid PointAnchorImage = new("43420358-b1bb-42d0-8282-0322badef6b2");
 
         // Generic
         [GameAssetId<SpriteAsset>]

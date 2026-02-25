@@ -9,27 +9,28 @@
         100
       ],
       "Events": {},
-      "AnimationDuration": 0.1
+      "AnimationDuration": 0.1,
+      "NextAnimation": []
     }
   },
   "Atlas": "editor",
   "Frames": [
     {
       "AtlasIndex": 0,
-      "Name": "dialogue_step-back",
+      "Name": "dialogue-button_step-back_0000",
       "Size": {
         "X": 16,
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 286,
-        "Y": 81,
+        "X": 97,
+        "Y": 162,
         "Width": 16,
         "Height": 16
       },
       "UV": {
-        "X": 0.55859375,
-        "Y": 0.15820312,
+        "X": 0.18945312,
+        "Y": 0.31640625,
         "Width": 0.03125,
         "Height": 0.03125
       },

@@ -17,35 +17,35 @@
   "Frames": [
     {
       "AtlasIndex": 0,
-      "Name": "editor_ear",
+      "Name": "point",
       "Size": {
         "X": 16,
         "Y": 16
       },
       "SourceRectangle": {
-        "X": 422,
-        "Y": 16,
-        "Width": 12,
-        "Height": 16
+        "X": 438,
+        "Y": 0,
+        "Width": 14,
+        "Height": 14
       },
       "UV": {
-        "X": 0.82421875,
-        "Y": 0.03125,
-        "Width": 0.0234375,
-        "Height": 0.03125
+        "X": 0.85546875,
+        "Y": 0,
+        "Width": 0.02734375,
+        "Height": 0.02734375
       },
       "TrimArea": {
-        "X": 3,
-        "Y": 0,
-        "Width": 12,
-        "Height": 16
+        "X": 1,
+        "Y": 1,
+        "Width": 14,
+        "Height": 14
       },
       "AtlasId": "editor"
     }
   ],
   "Origin": {
-    "X": 0,
-    "Y": 0
+    "X": 8,
+    "Y": 8
   },
   "Size": {
     "X": 16,
@@ -57,7 +57,7 @@
     "Width": 0,
     "Height": 0
   },
-  "Name": "editor_ear",
-  "Guid": "05b3d9cf-a92c-bed5-e704-4c729ec9890e",
+  "Name": "point",
+  "Guid": "43420358-b1bb-42d0-8282-0322badef6b2",
   "editorPath": "#\uF085Generated\\editor"
 }
