@@ -163,10 +163,12 @@ namespace Murder.Editor
                 }
             }
 
-            if (EditorSettings.StartMaximized)
+            if (!IsMaximized() && EditorSettings.StartMaximized)
             {
                 MaximizeWindow();
             }
+
+            _graphics.ApplyChanges();
         }
 
         private void QuitToEditor()
@@ -442,6 +444,9 @@ namespace Murder.Editor
             {
                 SDL3.SDL.SDL_MaximizeWindow(Window.Handle);
             }
+
+            _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+            _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
         }
 
         protected Point? GetWindowPosition()
