@@ -35,6 +35,11 @@ namespace Murder.Systems
 
         protected void Update(Entity e)
         {
+            if (!ShouldUpdate(e))
+            {
+                return;
+            }
+
             if (e.TryGetStateMachine() is IStateMachineComponent routine)
             {
                 float deltaTime = e.HasUnscaledDeltaTime() ?
@@ -48,6 +53,8 @@ namespace Murder.Systems
                 routine.Tick(deltaTime);
             }
         }
+
+        protected virtual bool ShouldUpdate(Entity e) => true;
 
         public void Exit(Context context)
         {
