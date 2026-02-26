@@ -138,6 +138,9 @@ namespace Murder.Editor
                 // assume we never want fullscreen
                 _graphics.IsFullScreen = false;
                 Window.IsBorderlessEXT = false;
+
+                _graphics.PreferredBackBufferWidth = Width * Calculator.RoundToInt(Data.GameProfile.GameScale);
+                _graphics.PreferredBackBufferHeight = Height * Calculator.RoundToInt(Data.GameProfile.GameScale);
             }
 
             if (!_initializeEditorWindowFirstTime)
@@ -153,25 +156,6 @@ namespace Murder.Editor
                 }
 
                 _initializeEditorWindowFirstTime = true;
-            }
-
-            Point displaySize = _graphics.GraphicsDevice.Adapter.CurrentDisplayMode.TitleSafeArea.Size();
-            
-            if (EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
-            {
-                Point diffToMaxSize = displaySize - EditorSettings.WindowSize;
-
-                if (diffToMaxSize.Y < 80)
-                {
-                    // This is too big, the user probably just wants the screen to be maximized.
-                    MaximizeWindow();
-                }
-                else
-                {
-                    // Clamp to the current display size with a small margin.
-                    _graphics.PreferredBackBufferWidth = screenSize.X;
-                    _graphics.PreferredBackBufferHeight = screenSize.Y;
-                }
             }
 
             _graphics.ApplyChanges();
