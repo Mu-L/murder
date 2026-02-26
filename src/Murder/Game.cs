@@ -376,7 +376,16 @@ namespace Murder
                     return;
                 }
 
-                _currentScreenSize = new(window.ClientBounds.Width, window.ClientBounds.Height);
+                if (Fullscreen)
+                {
+                    // let's dismiss whatever screen size we had if we went full screen.
+                    _currentScreenSize = null;
+                }
+                else
+                {
+                    _currentScreenSize = new(window.ClientBounds.Width, window.ClientBounds.Height);
+                }
+
                 OnWindowChanged();
             };
 
