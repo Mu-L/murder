@@ -60,6 +60,8 @@ namespace Murder.Editor
         /* *** Architect state *** */
         private bool _isPlayingGame = false;
 
+        private bool _initializeEditorWindowFirstTime = false;
+
         private StartPlayGameInfo? _queueStartPlayGame = null;
 
         public bool IsPlayingGame => _isPlayingGame;
@@ -138,10 +140,19 @@ namespace Murder.Editor
                 Window.IsBorderlessEXT = false;
             }
 
-            if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
+            if (!_initializeEditorWindowFirstTime)
             {
-                Point startPos = EditorSettings.WindowStartPosition;
-                SetWindowPosition(startPos);
+                if (!IsMaximized() && EditorSettings.StartMaximized)
+                {
+                    MaximizeWindow();
+                }
+                else if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
+                {
+                    Point startPos = EditorSettings.WindowStartPosition;
+                    SetWindowPosition(startPos);
+                }
+
+                _initializeEditorWindowFirstTime = true;
             }
 
             Point displaySize = _graphics.GraphicsDevice.Adapter.CurrentDisplayMode.TitleSafeArea.Size();
@@ -161,11 +172,6 @@ namespace Murder.Editor
                     _graphics.PreferredBackBufferWidth = screenSize.X;
                     _graphics.PreferredBackBufferHeight = screenSize.Y;
                 }
-            }
-
-            if (!IsMaximized() && EditorSettings.StartMaximized)
-            {
-                MaximizeWindow();
             }
 
             _graphics.ApplyChanges();
@@ -192,7 +198,11 @@ namespace Murder.Editor
 
                 // Manually set things up in the editor scene.
                 _editorScene.Reload();
-                OnWindowChanged();
+
+                if (Fullscreen)
+                {
+                    OnWindowChanged();
+                }
 
                 // This is important otherwise the editor will inherit the shader values from the game!
                 _editorScene.OnViewportChanged();

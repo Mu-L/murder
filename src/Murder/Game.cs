@@ -303,6 +303,7 @@ namespace Murder
 
         protected virtual bool HasCursor => false;
 
+        private Point? _currentScreenSize = null;
         private Point _screenSize;
 
         // TODO: Make this private or within a setter or whatever.
@@ -375,8 +376,8 @@ namespace Murder
                     return;
                 }
 
-                // propagate to the scene
-                ActiveScene?.OnClientWindowChanged(new(window.ClientBounds.Width, window.ClientBounds.Height));
+                _currentScreenSize = new(window.ClientBounds.Width, window.ClientBounds.Height);
+                OnWindowChanged();
             };
 
             IsMouseVisible = HasCursor || (game?.HasCursor ?? false);
@@ -458,7 +459,7 @@ namespace Murder
         {
             SetTargetFixedFramerate(Profile.TargetFps);
 
-            _screenSize = new Point(Width, Height) * Data.GameProfile.GameScale;
+            _screenSize = _currentScreenSize ?? new Point(Width, Height) * Data.GameProfile.GameScale;
 
             if (Fullscreen)
             {
