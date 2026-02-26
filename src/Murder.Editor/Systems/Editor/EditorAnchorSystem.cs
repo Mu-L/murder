@@ -82,6 +82,12 @@ namespace Murder.Editor.Systems.Editor
                             _starDrag = anchorPosition - cursor;
                             _draggingIndex = i;
                         }
+                        RenderServices.DrawText(render.DebugBatch, MurderFonts.PixelFont, anchor.Id, anchorPosition + new Vector2(0, -16), new DrawInfo(0)
+                        {
+                            Outline = Color.Black,
+                            Color = Color.White,
+                            Origin = new Vector2(0.5f, 1)
+                        });
                     }
 
                     if (_draggingIndex == i)
