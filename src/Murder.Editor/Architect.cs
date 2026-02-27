@@ -131,34 +131,41 @@ namespace Murder.Editor
 
             if (!_initializeEditorWindowFirstTime)
             {
-                if (!IsMaximized() && EditorSettings.StartMaximized)
-                {
-                    MaximizeWindow();
-
-                    // override any existing notification.
-                    OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
-                }
-
-                if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
-                {
-                    SetWindowPosition(EditorSettings.WindowStartPosition);
-
-                    // override any existing notification.
-                    OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
-                }
-                
-                if (!IsMaximized() && EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
-                {
-                    OnWindowChange(new(EditorSettings.WindowSize));
-                }
-
                 _initializeEditorWindowFirstTime = true;
 
-                // skip until next frame
-                return;
+                if (ApplyPreviousEditorWindowSetting())
+                {
+                    // skip until next frame
+                    return;
+                }
             }
 
             base.FlushWindow();
+        }
+
+        private bool ApplyPreviousEditorWindowSetting()
+        {
+            if (!IsMaximized() && EditorSettings.StartMaximized)
+            {
+                MaximizeWindow();
+                OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
+
+                return true;
+            }
+
+            bool appliedSettings = false;
+            if (EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
+            {
+                SetWindowPosition(EditorSettings.WindowStartPosition);
+            }
+
+            if (EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
+            {
+                OnWindowChange(new(EditorSettings.WindowSize));
+                appliedSettings = true;
+            }
+
+            return appliedSettings;
         }
 
         protected override void SetWindowSizeAndApply(Point screenSize)
