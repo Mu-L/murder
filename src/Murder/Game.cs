@@ -504,9 +504,6 @@ namespace Murder
         /// </remarks>
         public virtual void SetWindowSize(Point screenSize, bool remember)
         {
-            // _graphics.SynchronizeWithVerticalRetrace = true;
-            _windowSettingsDirty = false;
-
             if (Fullscreen)
             {
                 _windowedSize = _graphics.GraphicsDevice.Viewport.Bounds.Size();
@@ -524,8 +521,8 @@ namespace Murder
 
                 if (remember && _windowedSize.X > 0 && _windowedSize.Y > 0)
                 {
-                    _graphics.PreferredBackBufferWidth = (int)(_windowedSize.X);
-                    _graphics.PreferredBackBufferHeight = (int)(_windowedSize.Y);
+                    _graphics.PreferredBackBufferWidth = _windowedSize.X;
+                    _graphics.PreferredBackBufferHeight = _windowedSize.Y;
                 }
                 else
                 {
