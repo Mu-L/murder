@@ -131,12 +131,13 @@ namespace Murder.Editor
                 {
                     MaximizeWindow();
                 }
-                else if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
+
+                if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
                 {
                     SetWindowPosition(EditorSettings.WindowStartPosition);
                 }
                 
-                if (EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
+                if (!IsMaximized() && EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
                 {
                     OnWindowChange(new(EditorSettings.WindowSize));
                 }
