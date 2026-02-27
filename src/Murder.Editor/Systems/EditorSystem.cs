@@ -1,5 +1,6 @@
 ﻿using Bang.Contexts;
 using Bang.Entities;
+using Bang.StateMachines;
 using Bang.Systems;
 using ImGuiNET;
 using Murder.Attributes;
@@ -414,26 +415,23 @@ public class EditorSystem : IUpdateSystem, IMurderRenderSystem, IGuiSystem, ISta
         }
     }
 
-    public static void ResizeWindow(RenderContext render, Point windowSize)
+    public static void ResizeWindow(RenderContext _, Point windowSize)
     {
         Game.Instance.Fullscreen = false;
-        Game.Instance.SetWindowSize(windowSize, false);
-        Game.Instance.GraphicsDeviceManager.ApplyChanges();
-
-        render.OnClientWindowChanged(new(windowSize), force: true);
+        Game.Instance.OnWindowChange(new(windowSize));
     }
 
     private static void ResizeWindow(float scale, RenderContext render)
     {
         Point windowSize = (new Vector2(render.Viewport.NativeResolution.X, render.Viewport.NativeResolution.Y) * scale).Point();
-        Game.Instance.Fullscreen = false;
-        Game.Instance.SetWindowSize(windowSize, false);
-        Game.Instance.GraphicsDeviceManager.ApplyChanges();
 
-        render.OnClientWindowChanged(new WindowChangeSettings(windowSize)
-        {
-            NativeResolution = new Point(render.Viewport.NativeResolution.X, render.Viewport.NativeResolution.Y)
-        }, force: true);
+        Game.Instance.Fullscreen = false;
+        Game.Instance.OnWindowChange(
+            new(new WindowChangeSettings(windowSize)
+            {
+                NativeResolution = new Point(render.Viewport.NativeResolution.X, render.Viewport.NativeResolution.Y),
+                Force = false
+            }));
     }
 
     public void Update(Context context)

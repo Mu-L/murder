@@ -53,9 +53,36 @@ public static class CoroutineServices
         return murderWorld.RunCoroutine(WaitAndRun(seconds, action), flags);
     }
 
+    public static Coroutine FireNextFrame(this World world, Action action, CoroutineFlags flags = CoroutineFlags.None) => 
+        FireAfterFrames(world, 1, action, flags);
+
+    public static Coroutine FireAfterFrames(this World world, int frames, Action action, CoroutineFlags flags = CoroutineFlags.None)
+    {
+        if (frames == 0)
+        {
+            // immediately trigger
+            action.Invoke();
+            return new();
+        }
+
+        if (world is not MonoWorld murderWorld)
+        {
+            GameLogger.Warning("Unable to run coroutine on a world that is not MonoWorld.");
+            return new();
+        }
+
+        return murderWorld.RunCoroutine(WaitFramesAndRun(frames, action), flags);
+    }
+
     private static IEnumerator<Wait> WaitAndRun(float seconds, Action action)
     {
         yield return Wait.ForSeconds(seconds);
+        action.Invoke();
+    }
+
+    private static IEnumerator<Wait> WaitFramesAndRun(int frames, Action action)
+    {
+        yield return Wait.ForFrames(frames);
         action.Invoke();
     }
 }

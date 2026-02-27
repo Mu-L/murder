@@ -106,7 +106,7 @@ namespace Murder.Core
                 flags |= RenderContextFlags.Debug;
             }
 
-            _activeScene.Initialize(_graphics.GraphicsDevice, _settings, flags);
+            _activeScene.Initialize(_graphics.GraphicsDevice, flags);
         }
 
         /// <summary>

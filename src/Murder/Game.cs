@@ -68,12 +68,14 @@ namespace Murder
         /// <summary>
         /// Gets the game width from the GameProfile. This is the intended size, not the actual size. For the current window size use <see cref="RenderContext.Camera"/>.
         /// </summary>
-        public static int Width => Profile.GameWidth;
+        public static int DefaultWidth => Instance._game?.GameWidth ?? 320;
 
         /// <summary>
         /// Gets the game height from the GameProfile. This is the intended size, not the actual size. For the current window size use <see cref="RenderContext.Camera"/>.
         /// </summary>
-        public static int Height => Profile.GameHeight;
+        public static int DefaultHeight => Instance._game?.GameHeight ?? 180;
+
+        public static float DefaultScale => Instance._game?.Scale ?? 2;
 
         /// <summary>
         /// Gets the PlayerInput instance.
@@ -263,7 +265,6 @@ namespace Murder
         private bool _initialiazedAfterContentLoaded = false;
 
         private Point _windowedSize = Point.Zero;
-        private bool _windowSettingsDirty = true;
 
         /// <summary>
         /// Gets or sets the fullscreen mode of the game.
@@ -274,14 +275,14 @@ namespace Murder
             get => Preferences.FullScreen;
             set
             {
-                Preferences.SetFullScreen(value);
-                OnWindowChanged();
-            }
-        }
+                if (Fullscreen == value)
+                {
+                    return;
+                }
 
-        public void OnWindowChanged()
-        {
-            _windowSettingsDirty = true;
+                OnWindowChange(new(value ? ScreenUpdatedKind.FullScreen : ScreenUpdatedKind.Reset));
+                Preferences.SetFullScreen(value);
+            }
         }
 
         /// <summary>
@@ -293,17 +294,29 @@ namespace Murder
             get
             {
                 if (Window.ClientBounds.Width <= 0 || Window.ClientBounds.Height <= 0)
+                {
                     return Vector2.One;
+                }
+
+                if (_screenSize == Point.Zero)
+                {
+                    return Vector2.One;
+                }
 
                 return new(
-                    ((float)_screenSize.X / Window.ClientBounds.Width) / Profile.GameScale,
-                    ((float)_screenSize.Y / Window.ClientBounds.Height) / Profile.GameScale);
+                    ((float)_screenSize.X / Window.ClientBounds.Width) / DefaultScale,
+                    ((float)_screenSize.Y / Window.ClientBounds.Height) / DefaultScale);
             }
         }
 
         protected virtual bool HasCursor => false;
 
-        private Point? _currentScreenSize = null;
+        /// <summary>
+        /// Whether there is a pending screen update to modify the size.
+        /// </summary>
+        private WindowChangeNotification? _pendingWindowChange = null;
+        private WindowChangeNotification? _lastWindowChange = null;
+
         private Point _screenSize;
 
         // TODO: Make this private or within a setter or whatever.
@@ -378,15 +391,17 @@ namespace Murder
 
                 if (Fullscreen)
                 {
-                    // let's dismiss whatever screen size we had if we went full screen.
-                    _currentScreenSize = null;
-                }
-                else
-                {
-                    _currentScreenSize = new(window.ClientBounds.Width, window.ClientBounds.Height);
+                    // this was done by ourselves, so we're already aware of the change.
+                    return;
                 }
 
-                OnWindowChanged();
+                if (_lastWindowChange is WindowChangeNotification lastChange &&
+                    lastChange.ApplySizeTo == window.ClientBounds.Size())
+                {
+                    return;
+                }
+
+                OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
             };
 
             IsMouseVisible = HasCursor || (game?.HasCursor ?? false);
@@ -406,7 +421,7 @@ namespace Murder
             _preload = TryCreatePreloadScreen();
 
             Content.RootDirectory = _gameData.BinResourcesDirectoryPath;
-
+            OnWindowChange(new(Fullscreen ? ScreenUpdatedKind.FullScreen : ScreenUpdatedKind.Reset));
         }
 
         /// <summary>
@@ -452,10 +467,9 @@ namespace Murder
             // Propagate dianostics mode settings.
             World.DIAGNOSTICS_MODE = DIAGNOSTICS_MODE;
 
-            RefreshWindow();
-
             // Start the game wall clock
             _gameTimer.Start();
+            FlushWindow();
         }
 
         /// <summary>
@@ -464,22 +478,32 @@ namespace Murder
         /// <remarks>
         /// Refreshes the active scene with new graphics settings, if present.
         /// </remarks>
-        protected virtual void RefreshWindow()
+        protected virtual void FlushWindow()
         {
-            SetTargetFixedFramerate(Profile.TargetFps);
-
-            _screenSize = _currentScreenSize ?? new Point(Width, Height) * Data.GameProfile.GameScale;
-
-            if (Fullscreen)
+            if (_pendingWindowChange is null)
             {
-                SetWindowSize(new Point(Game.GraphicsDevice.Adapter.CurrentDisplayMode.Width, Game.GraphicsDevice.Adapter.CurrentDisplayMode.Height), false);
-            }
-            else
-            {
-                SetWindowSize(_screenSize, false);
+                return;
             }
 
-            _screenSize = new Point(_graphics.PreferredBackBufferWidth, _graphics.PreferredBackBufferHeight);
+            WindowChangeNotification notification = _pendingWindowChange.Value;
+
+            Point? applySize = notification.ApplySizeTo;
+            if (notification.Kind == ScreenUpdatedKind.FullScreen)
+            {
+                applySize = new Point(Game.GraphicsDevice.Adapter.CurrentDisplayMode.Width, Game.GraphicsDevice.Adapter.CurrentDisplayMode.Height);
+            }
+            else if (notification.Kind == ScreenUpdatedKind.Reset)
+            {
+                applySize = new Point(DefaultWidth, DefaultHeight) * DefaultScale;
+            }
+
+            if (applySize is not null)
+            {
+                SetWindowSizeAndApply(applySize.Value);
+            }
+
+            // update internal size.
+            _screenSize = applySize ?? new Point(Window.ClientBounds.Width, Window.ClientBounds.Height);
 
             if (!Fullscreen)
             {
@@ -489,49 +513,52 @@ namespace Murder
                 Window.IsBorderlessEXT = false;
             }
 
-            ActiveScene?.OnClientWindowChanged(_screenSize);
-            _windowSettingsDirty = false;
+            if (notification.ApplyToSettings is WindowChangeSettings settings)
+            {
+                ActiveScene?.OnClientWindowChanged(settings);
+            }
+            else
+            {
+                ActiveScene?.OnClientWindowChanged(_screenSize);
+            }
+
+            _lastWindowChange = notification;
+            _pendingWindowChange = null;
         }
 
         /// <summary>
         /// Sets the window size for the game based on the specified screen size and full screen settings.
         /// </summary>
         /// <param name="screenSize">The desired screen size in pixels.</param>
-        /// <param name="remember">Whether we should persist this window size.</param>
         /// <remarks>
         /// In windowed mode, uses either the saved window size or the provided screen size.
         /// Synchronizes with vertical retrace in debug mode.
         /// </remarks>
-        public virtual void SetWindowSize(Point screenSize, bool remember)
+        protected virtual void SetWindowSizeAndApply(Point screenSize)
         {
             if (Fullscreen)
             {
+                // TODO: Do we really want to save our last size?
                 _windowedSize = _graphics.GraphicsDevice.Viewport.Bounds.Size();
 
                 Window.IsBorderlessEXT = true;
                 _graphics.IsFullScreen = true;
-
-                _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-                _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             }
             else
             {
                 _graphics.IsFullScreen = false;
                 Window.IsBorderlessEXT = false;
-
-                if (remember && _windowedSize.X > 0 && _windowedSize.Y > 0)
-                {
-                    _graphics.PreferredBackBufferWidth = _windowedSize.X;
-                    _graphics.PreferredBackBufferHeight = _windowedSize.Y;
-                }
-                else
-                {
-                    _graphics.PreferredBackBufferWidth = screenSize.X;
-                    _graphics.PreferredBackBufferHeight = screenSize.Y;
-                }
             }
 
+            _graphics.PreferredBackBufferWidth = screenSize.X;
+            _graphics.PreferredBackBufferHeight = screenSize.Y;
+
             _graphics.ApplyChanges();
+        }
+
+        public void OnWindowChange(WindowChangeNotification notification)
+        {
+            _pendingWindowChange = notification;
         }
 
         /// <summary>
@@ -545,6 +572,7 @@ namespace Murder
             _gameData.Initialize();
 
             ApplyGameSettings();
+            SetTargetFixedFramerate(Profile.TargetFps);
 
             LoadContentImpl();
 
@@ -871,9 +899,9 @@ namespace Murder
 
             GameLogger.Verify(ActiveScene is not null);
 
-            if (_windowSettingsDirty)
+            if (_pendingWindowChange is not null)
             {
-                RefreshWindow();
+                FlushWindow();
             }
 
             bool loading = _preload is not null || !ActiveScene.Loaded;

@@ -1,6 +1,7 @@
 ﻿using ImGuiNET;
 using Microsoft.Xna.Framework.Input;
 using Murder.Assets;
+using Murder.Core;
 using Murder.Core.Input;
 using Murder.Diagnostics;
 using Murder.Editor.ImGuiExtended;
@@ -288,7 +289,7 @@ public partial class EditorScene
     private void RefreshEditorWindow()
     {
         Architect.Instance.SaveWindowPosition();
-        Architect.Instance.OnWindowChanged();
+        Architect.Instance.OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
     }
 
     private void PackAssetsToPublishedGame()

@@ -123,26 +123,8 @@ namespace Murder.Editor
             }
         }
 
-        public override void SetWindowSize(Point screenSize, bool remember)
+        protected override void FlushWindow()
         {
-            if (_isPlayingGame)
-            {
-                base.SetWindowSize(screenSize, false);
-                return;
-            }
-
-            if (Fullscreen)
-            {
-                Fullscreen = false;
-
-                // assume we never want fullscreen
-                _graphics.IsFullScreen = false;
-                Window.IsBorderlessEXT = false;
-
-                _graphics.PreferredBackBufferWidth = Width * Calculator.RoundToInt(Data.GameProfile.GameScale);
-                _graphics.PreferredBackBufferHeight = Height * Calculator.RoundToInt(Data.GameProfile.GameScale);
-            }
-
             if (!_initializeEditorWindowFirstTime)
             {
                 if (!IsMaximized() && EditorSettings.StartMaximized)
@@ -151,12 +133,37 @@ namespace Murder.Editor
                 }
                 else if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
                 {
-                    Point startPos = EditorSettings.WindowStartPosition;
-                    SetWindowPosition(startPos);
+                    SetWindowPosition(EditorSettings.WindowStartPosition);
+                }
+                
+                if (EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
+                {
+                    OnWindowChange(new(EditorSettings.WindowSize));
                 }
 
                 _initializeEditorWindowFirstTime = true;
             }
+
+            ImGuiIOPtr io = ImGui.GetIO();
+            io.ConfigFlags = ImGuiConfigFlags.DockingEnable;
+            io.FontGlobalScale = Math.Clamp(Architect.EditorSettings.FontScale, 1, 2);
+
+            base.FlushWindow();
+        }
+
+        protected override void SetWindowSizeAndApply(Point screenSize)
+        {
+            if (_isPlayingGame)
+            {
+                base.SetWindowSizeAndApply(screenSize);
+                return;
+            }
+
+            _graphics.IsFullScreen = false;
+            Window.IsBorderlessEXT = false;
+
+            _graphics.PreferredBackBufferWidth = screenSize.X;
+            _graphics.PreferredBackBufferHeight = screenSize.Y;
 
             _graphics.ApplyChanges();
         }
@@ -185,7 +192,7 @@ namespace Murder.Editor
 
                 if (Fullscreen)
                 {
-                    OnWindowChanged();
+                    Fullscreen = false;
                 }
 
                 // This is important otherwise the editor will inherit the shader values from the game!
@@ -472,15 +479,6 @@ namespace Murder.Editor
             }
 
             return false;
-        }
-
-        protected override void RefreshWindow()
-        {
-            ImGuiIOPtr io = ImGui.GetIO();
-            io.ConfigFlags = ImGuiConfigFlags.DockingEnable;
-            io.FontGlobalScale = Math.Clamp(Architect.EditorSettings.FontScale, 1, 2);
-
-            base.RefreshWindow();
         }
 
         /// <summary>

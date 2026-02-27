@@ -135,7 +135,7 @@ public class CursorTextureManager : IDisposable
                 continue;
             }
 
-            using Texture2D texture = atlas.CreateTextureFromAtlas(coordinate, SurfaceFormat.Color, scale: Game.Profile.GameScale);
+            using Texture2D texture = atlas.CreateTextureFromAtlas(coordinate, SurfaceFormat.Color, scale: Game.DefaultScale);
             builder.Add(MouseCursor.FromTexture2D(texture, sprite.Origin.X, sprite.Origin.Y));
         }
 

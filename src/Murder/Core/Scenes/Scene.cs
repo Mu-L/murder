@@ -1,6 +1,5 @@
-﻿using Microsoft.Xna.Framework.Graphics;
-using Murder.Assets;
-using Murder.Core.Geometry;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Murder.Core.Graphics;
 using Murder.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -26,11 +25,11 @@ namespace Murder.Core
         private Action? _onRefreshWindow = default;
 
         [MemberNotNull(nameof(RenderContext))]
-        public virtual void Initialize(GraphicsDevice graphics, GameProfile settings, RenderContextFlags flags)
+        public virtual void Initialize(GraphicsDevice graphics, RenderContextFlags flags)
         {
             RenderContext = Game.Instance.CreateRenderContext(
                 graphics,
-                camera: new(settings.GameWidth, settings.GameHeight),
+                camera: new(Game.DefaultWidth, Game.DefaultHeight),
                 flags);
         }
 
@@ -69,9 +68,11 @@ namespace Murder.Core
         /// <summary>
         /// Refresh the window size, updating the camera and render context.
         /// </summary>
-        public virtual void OnClientWindowChanged(Point viewportSize)
+        public virtual void OnClientWindowChanged(Point viewportSize) => OnClientWindowChanged(new WindowChangeSettings(viewportSize));
+
+        public virtual void OnClientWindowChanged(WindowChangeSettings settings)
         {
-            RenderContext?.OnClientWindowChanged(new(viewportSize));
+            RenderContext?.OnClientWindowChanged(settings);
             _onRefreshWindow?.Invoke();
         }
 

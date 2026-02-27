@@ -121,9 +121,9 @@ namespace Murder.Editor.CustomEditors
                     new WindowChangeSettings(info.Size) 
                     { 
                         NativeResolution = info.Size, 
-                        ResizeStyle = new ViewportResizeStyle(ViewportResizeMode.None) 
-                    },
-                    force: true);
+                        ResizeStyle = new ViewportResizeStyle(ViewportResizeMode.None),
+                        Force = true
+                    });
             }
             else if (target is PrefabAsset)
             {

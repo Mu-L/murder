@@ -321,7 +321,7 @@ public class RenderContext : IDisposable
             return false;
         }
 
-        Point nativeResolution = settings.NativeResolution ?? new(Game.Profile.GameWidth, Game.Profile.GameHeight);
+        Point nativeResolution = settings.NativeResolution ?? new(Game.DefaultWidth, Game.DefaultHeight);
         ViewportResizeStyle resizeStyle = settings.ResizeStyle ?? Game.Profile.ResizeStyle;
 
         Viewport = new Viewport(settings.Size, nativeResolution, resizeStyle);
@@ -554,10 +554,10 @@ public class RenderContext : IDisposable
         stream.Close();
     }
 
-    public virtual bool OnClientWindowChanged(WindowChangeSettings settings, bool force = false)
+    public virtual bool OnClientWindowChanged(WindowChangeSettings settings)
     {
-        Point nativeResolution = settings.NativeResolution ?? new(Game.Profile.GameWidth, Game.Profile.GameHeight);
-        if (!force && Viewport.Size == settings.Size && Viewport.NativeResolution == nativeResolution)
+        Point nativeResolution = settings.NativeResolution ?? new(Game.DefaultWidth, Game.DefaultHeight);
+        if (!settings.Force && Viewport.Size == settings.Size && Viewport.NativeResolution == nativeResolution)
         {
             // No changes, skip
             return false;
@@ -673,6 +673,8 @@ public struct WindowChangeSettings
     public Point? NativeResolution { get; init; } = null;
 
     public ViewportResizeStyle? ResizeStyle { get; init; } = null;
+
+    public bool Force { get; init; } = false;
 
     public WindowChangeSettings(Point size) => Size = size;
 }

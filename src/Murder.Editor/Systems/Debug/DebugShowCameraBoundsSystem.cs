@@ -27,8 +27,11 @@ namespace Murder.Editor.Systems.Debug
                 return;
             }
 
-            Rectangle cameraRect = new(render.Camera.Position.X + render.Camera.HalfWidth - Game.Profile.GameWidth / 2f + info.Offset.X,
-                render.Camera.Position.Y + render.Camera.Height / 2f - Game.Profile.GameHeight / 2f + info.Offset.Y, Game.Profile.GameWidth, Game.Profile.GameHeight);
+            Rectangle cameraRect = new(
+                render.Camera.Position.X + render.Camera.HalfWidth - Game.DefaultWidth / 2f + info.Offset.X,
+                render.Camera.Position.Y + render.Camera.Height / 2f - Game.DefaultHeight / 2f + info.Offset.Y, 
+                Game.DefaultWidth, 
+                Game.DefaultHeight);
 
             render.GameUiBatch.DrawRectangleOutline(cameraRect + new Point(0, 1), Game.Profile.Theme.Bg, 3, 0.5f);
             render.GameUiBatch.DrawRectangleOutline(cameraRect, Game.Profile.Theme.HighAccent, 2, 0.45f);

@@ -23,10 +23,6 @@ namespace Murder.Assets
 
         public override bool StoreInDatabase => false;
 
-        /// <summary>Gets the game's intended aspect ratio</summary>
-        public float Aspect => GameHeight / (float)GameWidth;
-                 
-
         /// <summary>
         /// Where our atlas .png and .json files are stored.
         /// Under: 
@@ -140,13 +136,6 @@ namespace Murder.Assets
         /// </summary>
         [HideInEditor]
         public readonly string GenericAssetsPath = "data/";
-
-        /// <summary>Game desired display width. Use <see cref="RenderContext.Camera"/> size for the runtime value.</summary>
-        public readonly int GameWidth = 320;
-        /// <summary>Game desired display height. Use <see cref="RenderContext.Camera"/> size for the runtime value.</summary>
-        public readonly int GameHeight = 180;
-        /// <summary>Game scaling factor.</summary>
-        public readonly float GameScale = 2;
 
         /// <summary>
         /// Used for reporting bugs and feedback.

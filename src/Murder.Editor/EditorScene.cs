@@ -110,10 +110,6 @@ namespace Murder.Editor
         {
             // always keep the text input
             TextInputEXT.StartTextInput();
-
-            // make sure we pick up the resolution from the last window size
-            // saved in the editor settings file.
-            Game.Instance.OnWindowChanged();
         }
 
         private void ReopenLastTabs()

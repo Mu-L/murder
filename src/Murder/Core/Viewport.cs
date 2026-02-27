@@ -1,16 +1,14 @@
 ﻿using Murder.Core.Geometry;
 using Murder.Core.Graphics;
 using Murder.Utilities;
-using System.Net.Http.Headers;
 using System.Numerics;
 
 namespace Murder.Core;
 
 public readonly struct Viewport
 {
-
     /// <summary>
-    /// The size of the viewport (tipically the game's window)
+    /// The size of the viewport (typically the game's window)
     /// </summary>
     public readonly Point Size;
 

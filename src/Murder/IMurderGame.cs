@@ -123,5 +123,20 @@ namespace Murder
         /// This is the version of the game, used when checking for save compatibility.
         /// </summary>
         public float Version => 0;
+
+        /// <summary>
+        /// Game desired display width. Use <see cref="RenderContext.Camera"/> size for the runtime value.
+        /// </summary>
+        public int GameWidth => 320;
+
+        /// <summary>
+        /// Game desired display height. Use <see cref="RenderContext.Camera"/> size for the runtime value.
+        /// </summary>
+        public int GameHeight => 180;
+
+        /// <summary>
+        /// Game scaling factor.
+        /// </summary>
+        public float Scale => 2;
     }
 }
