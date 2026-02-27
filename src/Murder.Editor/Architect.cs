@@ -134,11 +134,17 @@ namespace Murder.Editor
                 if (!IsMaximized() && EditorSettings.StartMaximized)
                 {
                     MaximizeWindow();
+
+                    // override any existing notification.
+                    OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
                 }
 
                 if (!IsMaximized() && EditorSettings.WindowStartPosition.X > 0 && EditorSettings.WindowStartPosition.Y > 0)
                 {
                     SetWindowPosition(EditorSettings.WindowStartPosition);
+
+                    // override any existing notification.
+                    OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
                 }
                 
                 if (!IsMaximized() && EditorSettings.WindowSize.X > 0 && EditorSettings.WindowSize.Y > 0)
