@@ -125,6 +125,10 @@ namespace Murder.Editor
 
         protected override void FlushWindow()
         {
+            ImGuiIOPtr io = ImGui.GetIO();
+            io.ConfigFlags = ImGuiConfigFlags.DockingEnable;
+            io.FontGlobalScale = Math.Clamp(Architect.EditorSettings.FontScale, 1, 2);
+
             if (!_initializeEditorWindowFirstTime)
             {
                 if (!IsMaximized() && EditorSettings.StartMaximized)
@@ -143,11 +147,10 @@ namespace Murder.Editor
                 }
 
                 _initializeEditorWindowFirstTime = true;
-            }
 
-            ImGuiIOPtr io = ImGui.GetIO();
-            io.ConfigFlags = ImGuiConfigFlags.DockingEnable;
-            io.FontGlobalScale = Math.Clamp(Architect.EditorSettings.FontScale, 1, 2);
+                // skip until next frame
+                return;
+            }
 
             base.FlushWindow();
         }
@@ -446,9 +449,6 @@ namespace Murder.Editor
             {
                 SDL3.SDL.SDL_MaximizeWindow(Window.Handle);
             }
-
-            _graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
-            _graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
         }
 
         protected Point? GetWindowPosition()
