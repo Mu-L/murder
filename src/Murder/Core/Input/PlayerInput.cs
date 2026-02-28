@@ -176,7 +176,7 @@ public class PlayerInput
     /// </summary>
     public void RegisterButton(int button, params Keys[] keys)
     {
-        var b = GetOrCreateButton(button);
+        VirtualButton b = GetOrCreateButton(button);
         b.Register(keys);
     }
 
@@ -185,8 +185,17 @@ public class PlayerInput
     /// </summary>
     public void RegisterButton(int button, params Buttons[] buttons)
     {
-        var b = GetOrCreateButton(button);
+        VirtualButton b = GetOrCreateButton(button);
         b.Register(buttons);
+    }
+
+    /// <summary>
+    /// Set a minimum cooldown for input on this button.
+    /// </summary>
+    public void RegisterFlickerProtection(int button, float flickerProtection)
+    {
+        VirtualButton b = GetOrCreateButton(button);
+        b.SetFlickerProtection(flickerProtection);
     }
 
     /// <summary>

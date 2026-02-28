@@ -20,6 +20,8 @@ public class VirtualButton : IVirtualInput
     public float HeldTime = 0f;
     public event Action<InputState>? OnPress;
 
+    public float FlickerProtection { get; private set; } = 0;
+    
     public void Update(InputState inputState)
     {
         Previous = Down;
@@ -53,6 +55,12 @@ public class VirtualButton : IVirtualInput
             HeldTime += Game.NowUnscaled - LastPressed;
             if (HeldTime < 0)
                 HeldTime = 0;
+        }
+
+        if (Pressed && Game.NowUnscaled - LastPressed < FlickerProtection)
+        {
+            Down = false;
+            return;
         }
 
         if (Pressed)
@@ -169,6 +177,11 @@ public class VirtualButton : IVirtualInput
         Buttons = ImmutableArray<InputButton>.Empty;
         _lastPressedButton[0] = null;
         _lastPressedButton[1] = null;
+    }
+
+    public void SetFlickerProtection(float flickerProtection)
+    {
+        FlickerProtection = flickerProtection;
     }
 
     public InputButton LastPressedButton(bool keyboard)
