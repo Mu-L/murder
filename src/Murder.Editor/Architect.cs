@@ -209,7 +209,8 @@ namespace Murder.Editor
 
                 if (Fullscreen)
                 {
-                    Fullscreen = false;
+                    // Actually this is more annoying, just keep the full screen.
+                    // Fullscreen = false;
                 }
 
                 // This is important otherwise the editor will inherit the shader values from the game!
