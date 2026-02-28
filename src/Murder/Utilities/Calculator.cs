@@ -359,13 +359,18 @@ namespace Murder.Utilities
 
         public static bool Blink(float speed, bool scaled)
         {
+            return Blink(speed, scaled ? Game.Now : Game.NowUnscaled);
+        }
+
+        public static bool Blink(float speed, float time)
+        {
             if (speed == 0)
             {
                 return false;
             }
 
             var duration = 1 / speed;
-            return MathF.Round((scaled ? Game.Now : Game.NowUnscaled) * speed) % 2 == 0;
+            return MathF.Round(time * speed) % 2 == 0;
         }
 
         public static bool SameSign(float num1, float num2)
