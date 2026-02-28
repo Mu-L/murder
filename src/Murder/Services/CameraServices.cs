@@ -33,4 +33,10 @@ public static class CameraServices
 
         w.Camera.ShakeTime = MathF.Max(time, w.Camera.ShakeTime);
     }
+
+    public static void BumpCamera(World world, float intensity)
+    {
+        var w = (MonoWorld)world;
+        w.Camera.Bump(intensity);
+    }
 }

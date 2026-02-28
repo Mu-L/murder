@@ -7,7 +7,7 @@ namespace Murder.Components
         public const float GRAVITY = 0.1f;
 
         public readonly float Z = 0;
-        public readonly float ZVelocity = 0;
+        public readonly float ZVelocity { get; init; } = 0;
         public readonly bool HasGravity { get; init; } = true;
 
         public VerticalPositionComponent() { }

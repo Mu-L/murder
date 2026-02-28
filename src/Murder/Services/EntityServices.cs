@@ -80,7 +80,7 @@ public static class EntityServices
         {
             return null;
         }
-        
+
         return entity.GetGlobalPosition();
     }
 
@@ -335,7 +335,7 @@ public static class EntityServices
     {
         SpriteComponent? sprite = TryPlaySpriteAnimation(entity, nextAnimations, replaceSpriteGuid);
 
-        GameLogger.Verify(sprite is not null, 
+        GameLogger.Verify(sprite is not null,
             $"Entity {entity.EntityId} doesn't have a sprite component ({entity.Components.Length} components, trying to play '{string.Join(',', nextAnimations)}')");
         return sprite;
     }
@@ -380,7 +380,7 @@ public static class EntityServices
     {
         SpriteComponent? sprite = TryPlaySpriteAnimation(entity, nextAnimations);
 
-        GameLogger.Verify(sprite is not null, 
+        GameLogger.Verify(sprite is not null,
             $"Entity {entity.EntityId} doesn't have a sprite component ({entity.Components.Length} components, trying to play '{string.Join(',', nextAnimations)}')");
         return sprite;
     }
@@ -650,9 +650,9 @@ public static class EntityServices
     }
 
     public static void PlayAnimationOverload(
-        this Entity e, 
-        string animation, 
-        AnimationOverloadProperties properties = AnimationOverloadProperties.Loop | AnimationOverloadProperties.IgnoreFacing, 
+        this Entity e,
+        string animation,
+        AnimationOverloadProperties properties = AnimationOverloadProperties.Loop | AnimationOverloadProperties.IgnoreFacing,
         int offset = 0,
         Guid? customSprite = null)
     {
@@ -685,15 +685,27 @@ public static class EntityServices
             with
             {
                 SortOffset = offset,
-                Flip = properties.HasFlag(AnimationOverloadProperties.FlipHorizontal) ? 
+                Flip = properties.HasFlag(AnimationOverloadProperties.FlipHorizontal) ?
                         ImageFlip.Horizontal : ImageFlip.None,
-                SupportedDirections = properties.HasFlag(AnimationOverloadProperties.LockTo4Directions) ? 
+                SupportedDirections = properties.HasFlag(AnimationOverloadProperties.LockTo4Directions) ?
                         4 : null
             };
 
         e.SetAnimationOverload(overload);
         e.RemoveAnimationComplete();
         e.RemoveAnimationCompleteMessage();
+    }
+
+    public static void AddVerticalVelocity(Entity entity, float zVelocity)
+    {
+        if (entity.TryGetVerticalPosition() is VerticalPositionComponent verticalPosition)
+        {
+            entity.SetVerticalPosition(verticalPosition with { ZVelocity = verticalPosition.ZVelocity + zVelocity });
+        }
+        else
+        {
+            entity.SetVerticalPosition(new VerticalPositionComponent(1, zVelocity, true));
+        }
     }
 }
 
