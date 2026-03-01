@@ -496,6 +496,10 @@ namespace Murder
             {
                 applySize = new Point(DefaultWidth, DefaultHeight) * DefaultScale;
             }
+            else if (notification.Kind == ScreenUpdatedKind.NotifyAndApply && applySize is null)
+            {
+                applySize = new Point(Window.ClientBounds.Width, Window.ClientBounds.Height);
+            }
 
             if (applySize is not null)
             {

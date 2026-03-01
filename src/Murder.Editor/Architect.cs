@@ -148,7 +148,7 @@ namespace Murder.Editor
             if (!IsMaximized() && EditorSettings.StartMaximized)
             {
                 MaximizeWindow();
-                OnWindowChange(new(ScreenUpdatedKind.NotifyOnly));
+                OnWindowChange(new(ScreenUpdatedKind.NotifyAndApply));
 
                 return true;
             }
