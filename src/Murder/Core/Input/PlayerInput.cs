@@ -258,10 +258,30 @@ public class PlayerInput
             _buttons[MurderInputButtons.Debug].Update(inputState);
         }
 #endif
-
+        bool hasMouseBinding = false;
         foreach (var button in _buttons)
         {
+            foreach (var individualButton in button.Value.Buttons)
+            {
+                if (button.Key == MurderInputButtons.LeftClick || button.Key == MurderInputButtons.RightClick || button.Key == MurderInputButtons.MiddleClick)
+                {
+                    continue;
+                }
+
+                if (individualButton.Mouse.HasValue)
+                {
+                    hasMouseBinding = true;
+                    break;
+                }
+            }
+
             button.Value.Update(inputState);
+        }
+
+        if (hasMouseBinding && Game.Instance.IsActive)
+        {
+            var center = Game.Instance.Window.ClientBounds.Center;
+            Mouse.SetPosition(center.X, center.Y);
         }
 
         foreach (var axis in _axis)
