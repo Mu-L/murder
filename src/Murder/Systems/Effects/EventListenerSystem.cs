@@ -128,6 +128,17 @@ public class EventBroadcasterSystem : IMessagerSystem
         {
             target.SendAnimationEventMessage(animationEvent);
         }
+
+        if (broadcast.OtherTargets is ImmutableArray<string> otherTargets)
+        {
+            foreach (string t in otherTargets)
+            {
+                if (entity.TryFetchChild(t) is Entity otherTarget)
+                {
+                    otherTarget.SendAnimationEventMessage(animationEvent);
+                }
+            }
+        }
     }
 }
 
