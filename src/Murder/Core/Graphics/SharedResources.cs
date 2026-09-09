@@ -10,6 +10,28 @@ namespace Murder.Core.Graphics
     {
         /// Textures 2D do not need to be created for each spritebatch, only for different graphics devices.
         private static Texture2D _pixel = null!;
+        
+        public static readonly BlendState MaskBlendState = new()
+        {
+            ColorBlendFunction = BlendFunction.Add,
+            ColorSourceBlend = Blend.Zero,
+            ColorDestinationBlend = Blend.SourceAlpha,
+
+            AlphaBlendFunction = BlendFunction.Add,
+            AlphaSourceBlend = Blend.Zero,
+            AlphaDestinationBlend = Blend.SourceAlpha
+        };
+
+        public static readonly BlendState SourceInBlendState = new()
+        {
+            ColorBlendFunction = BlendFunction.Add,
+            ColorSourceBlend = Blend.DestinationAlpha,
+            ColorDestinationBlend = Blend.Zero,
+
+            AlphaBlendFunction = BlendFunction.Add,
+            AlphaSourceBlend = Blend.DestinationAlpha,
+            AlphaDestinationBlend = Blend.Zero
+        };
 
         public static Texture2D GetOrCreatePixel()
         {

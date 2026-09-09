@@ -8,7 +8,7 @@ using System.Numerics;
 
 namespace Murder.Core;
 
-public class Mask2D : IDisposable
+public class RectMask : IDisposable
 {
     public Point Size { get; private set; }
 
@@ -20,7 +20,7 @@ public class Mask2D : IDisposable
     private readonly Batch2D _batch;
     private readonly Color _color;
 
-    public Mask2D(int width, int height, Color? color = null)
+    public RectMask(int width, int height, Color? color = null)
     {
         _renderTarget = new(Game.GraphicsDevice, width, height, false, SurfaceFormat.Color, DepthFormat.None, 0, RenderTargetUsage.PreserveContents);
         _batch = new Batch2D("Mask",
@@ -34,10 +34,10 @@ public class Mask2D : IDisposable
 
         Size = new(width, height);
     }
-    public Mask2D(Vector2 size, Color? color = null) : this((int)size.X, (int)size.Y, color)
+    public RectMask(Vector2 size, Color? color = null) : this((int)size.X, (int)size.Y, color)
     {
     }
-    public Mask2D(Point size, Color? color = null) : this((int)size.X, (int)size.Y, color)
+    public RectMask(Point size, Color? color = null) : this((int)size.X, (int)size.Y, color)
     {
     }
 
@@ -138,7 +138,7 @@ public class Mask2D : IDisposable
             drawInfo.Scale.ToXnaVector2(),
             drawInfo.ImageFlip,
             drawInfo.Color,
-            drawInfo.Origin.ToXnaVector2(),
+            drawInfo.Origin.ToXnaVector2() * Size,
             drawInfo.GetBlendMode(),
             drawInfo.BlendState);
 

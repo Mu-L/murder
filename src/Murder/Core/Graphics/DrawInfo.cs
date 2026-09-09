@@ -14,6 +14,8 @@ public enum MurderBlendState
 {
     AlphaBlend,
     Additive,
+    Mask,
+    SourceIn,
 }
 
 [Flags]

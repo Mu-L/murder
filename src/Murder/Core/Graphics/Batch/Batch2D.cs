@@ -463,6 +463,12 @@ public class Batch2D
             case MurderBlendState.Additive:
                 _blendState = BlendState.Additive;
                 break;
+            case MurderBlendState.Mask:
+                _blendState = SharedResources.MaskBlendState;
+                break;
+            case MurderBlendState.SourceIn:
+                _blendState = SharedResources.SourceInBlendState;
+                break;
         }
     }
 
